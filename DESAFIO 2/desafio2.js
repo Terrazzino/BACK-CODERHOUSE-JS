@@ -33,12 +33,27 @@ class Contenedor {
         this.archivo=archivo
     }
 
-    deleteById(num){
-        let productsNew = productsLista.filter(prod=>prod.id!==num);
-        productsLista = productsNew;
-        fs.promises.writeFile(this.archivo,JSON.stringify(productsLista,null,2))
-        .then(console.log("Los nuevos productos son: ", productsLista))
-        .catch(err=>console.log("Error: ",err))
+    async deleteById(num){
+        try {
+            productsLista.map(prod=>{
+                if(prod.id==num){
+                   productsLista.splice(num,1);
+                    fs.promises.writeFile(this.archivo,JSON.stringify(productsLista,null,2))
+                    .then(console.log("Los nuevos productos son: ", productsLista))
+                    .catch(err=>console.log("Error: ",err))
+                }else{
+                    console.log("El numero ingresado no corresponde a la lista de productos")
+                }
+            })
+
+            // let productsNew = productsLista.filter(prod=>prod.id!==num);
+
+            // await fs.promises.writeFile(this.archivo,JSON.stringify(productsNew,null,2))
+            // .then(console.log("Los nuevos productos son: ", productsNew))
+            // .catch(err=>console.log("Error: ",err))
+        } catch (error) {
+            console.log("Error al buscar el numero de ID")
+        }
     }
 
     async save(objeto){
@@ -52,8 +67,8 @@ class Contenedor {
                     id:i
                 }
             }
-            productsLista.push(newObj);
-            await fs.promises.writeFile(this.archivo,JSON.stringify(productsLista,null,2))
+            let newList = productsLista.push(newObj);
+            await fs.promises.writeFile(this.archivo,JSON.stringify(newList,null,2))
             .then(console.log("Anexamos los productos con éxito"))
             .catch(err=>console.log(err))
         } catch (error) {
@@ -85,7 +100,9 @@ class Contenedor {
     }
 
     async deleteAll(){
-        await fs.promises.writeFile(this.archivo,JSON.stringify([]))
+        productsLista=[];
+        await fs.promises.writeFile(this.archivo,JSON.stringify(productsLista));
+        console.log("Productos de la lista: ",productsLista)
     }
 }
 
@@ -99,23 +116,7 @@ prod.save(beer5)
 
 prod.getAll()
 
-prod.getById(1)
-prod.getById(4)
-
-prod.deleteAll()
-
+// prod.getById(1)
 // prod.deleteById(2)
-// prod.deleteById(0)
-// prod.deleteById(1)
-// prod.deleteById(3)
-
-
-// try {
-//     let top=productsLista.length
-//     productsLista.splice(1,top);
-//     await fs.promises.writeFile(this.archivo,JSON.stringify(productsLista,null,2))
-//     .then(console.log("Borrado con éxito todos los productos"))
-//     .catch(console.log("Error al borrar archivos"))
-// } catch (error) {
-//     console.log(error)
-// }
+// prod.deleteAll()
+console.log("Lista Final: ",productsLista)
