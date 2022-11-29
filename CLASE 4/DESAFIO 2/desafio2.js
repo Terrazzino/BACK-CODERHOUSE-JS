@@ -45,12 +45,6 @@ class Contenedor {
                     console.log("El numero ingresado no corresponde a la lista de productos")
                 }
             })
-
-            // let productsNew = productsLista.filter(prod=>prod.id!==num);
-
-            // await fs.promises.writeFile(this.archivo,JSON.stringify(productsNew,null,2))
-            // .then(console.log("Los nuevos productos son: ", productsNew))
-            // .catch(err=>console.log("Error: ",err))
         } catch (error) {
             console.log("Error al buscar el numero de ID")
         }
@@ -67,8 +61,8 @@ class Contenedor {
                     id:i
                 }
             }
-            let newList = productsLista.push(newObj);
-            await fs.promises.writeFile(this.archivo,JSON.stringify(newList,null,2))
+            productsLista.push(newObj);
+            await fs.promises.writeFile(this.archivo,JSON.stringify(productsLista,null,2))
             .then(console.log("Anexamos los productos con éxito"))
             .catch(err=>console.log(err))
         } catch (error) {
@@ -116,7 +110,7 @@ prod.save(beer5)
 
 prod.getAll()
 
-// prod.getById(1)
-// prod.deleteById(2)
-// prod.deleteAll()
+prod.getById(1)
+prod.deleteById(2)
+prod.deleteAll()
 console.log("Lista Final: ",productsLista)
